@@ -44,17 +44,13 @@ services:
     depends_on:
       - airflow-webserver
 
-  fastapi:
-    build: .
-    command: uvicorn vehicle_ml.api.main:app --host 0.0.0.0 --port 8000
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:latest
     ports:
-      - "8000:8000"
+      - "5000:5000"
     volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-    depends_on:
-      - airflow-webserver
-      - airflow-scheduler
+      - ./mlruns:/mlflow/mlruns
+    command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlflow/mlruns --host 0.0.0.0
 
   training:
     build: .
