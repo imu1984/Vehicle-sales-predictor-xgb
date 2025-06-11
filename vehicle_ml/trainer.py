@@ -337,7 +337,7 @@ class Trainer:
 
         if save_path:
             plt.savefig(save_path)
-        plt.show()
+        # plt.show()
 
     def save_model(self, path: Union[str, Path]) -> None:
         """Save model to disk.

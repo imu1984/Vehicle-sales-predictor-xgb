@@ -15,7 +15,7 @@ def add_datetime_feature(
     if time_column not in data.columns:
         raise ValueError(f"'{time_column}' column not found in dataframe.")
 
-    data[time_column] = pd.to_datetime(data[time_column], errors="coerce")
+    data[time_column] = pd.to_datetime(data[time_column], format="%Y%m", errors="coerce")
     available_features = {
         "year": data[time_column].dt.year,
         "month": data[time_column].dt.month,
@@ -39,5 +39,6 @@ def add_datetime_feature(
 
         feature_col_name = f"{prefix}_{feature}"
         data[feature_col_name] = available_features[feature]
+        feature_columns.append(feature_col_name)
 
     return data
