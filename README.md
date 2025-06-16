@@ -1,7 +1,9 @@
 # 🚗 Vehicle Sales Predictor
 
 Predict future vehicle sales like a pro.
-> This open-source project demonstrates how to build, track, and deploy an end-to-end machine learning pipeline — from raw data to actionable predictions. It uses modern MLOps tools like MLflow, DVC, and GitHub for reproducibility and collaboration.
+> This project demonstrates how to build, track, and deploy an end-to-end machine learning pipeline — from raw data to actionable predictions. It uses modern MLOps tools like MLflow, DVC, AirFlow and GitHub for reproducibility and collaboration.
+
+![](./docs/assets/arch.png)
 
 
 ## ✨ Features
