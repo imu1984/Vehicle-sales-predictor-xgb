@@ -92,3 +92,4 @@ coverage.xml
 /airflow/logs
 /airflow/airflow*
 /airflow/simple_auth*
+feature_importance.png

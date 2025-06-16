@@ -1,14 +1,13 @@
 # 🚗 Vehicle Sales Predictor
 
-Predict future vehicle sales like a pro.
-> This project demonstrates how to build, track, and deploy an end-to-end machine learning pipeline — from raw data to actionable predictions. It uses modern MLOps tools like MLflow, DVC, AirFlow and GitHub for reproducibility and collaboration.
+> Predict future vehicle sales like a pro. This project demonstrates how to build, track, and deploy an end-to-end machine learning pipeline — from raw data to actionable predictions.
 
 ![](./docs/assets/arch.png)
 
 
 ## ✨ Features
 
-- Data Source: CSV/Parquet from local, S3, or database
+- Data Source: CSV/Parquet from local, S3, or database. use DVC for data version.
 - Airflow DAG: Orchestrates data loading, training, and model registration
 - XGBoost Training Container: Trains model and logs to MLflow (optional)
 - MLflow Tracking + Registry: Logs metrics/artifacts and handles model versioning
@@ -33,10 +32,11 @@ uv pip install -r requirements.txt
 
 ## 🚀 Getting Started
 
-I uploaded dataset to [kaggle](https://www.kaggle.com/datasets/brendayue/china-vehicle-sales-data)
+Dataset:
+- Downloaded from [kaggle](https://www.kaggle.com/datasets/brendayue/china-vehicle-sales-data)
 
 
-Train your model:
+Train model:
 ```shell
 cd examples
 python run_train.py
@@ -47,12 +47,12 @@ Make prediction server with the trained model:
 python app.py
 ```
 
-Track your experiments
+Track your experiments:
 ```
 mlflow ui
 ```
 
-Or I released the [vehicle-ml](https://pypi.org/project/vehicle-ml/) package
+[vehicle-ml](https://pypi.org/project/vehicle-ml/) package has been released:
 ```
 pip install vehicle-ml
 ```
@@ -94,6 +94,3 @@ The pipeline includes:
 - Track pipeline progress through the Airflow web interface
 - View model metrics and artifacts in MLflow
 - Access model metadata in the `models` directory
-
-
-## Experiments
