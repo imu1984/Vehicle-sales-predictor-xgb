@@ -87,7 +87,6 @@ coverage.xml
 *.csv
 *.db
 *.mdl
-*.png
 *.json
 /mlruns
 /airflow/logs
