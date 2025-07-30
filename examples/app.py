@@ -10,6 +10,10 @@ import pandas as pd
 import xgboost as xgb
 from fastapi import Depends, FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import Request, Form
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field, field_validator
 import joblib
 
@@ -38,6 +42,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# templates = Jinja2Templates(directory="templates")
 
 
 class SalesRequest(BaseModel):
@@ -143,6 +149,13 @@ class SalesPredictor:
         Returns:
             DataFrame with added lagging features
         """
+        # # Add datetime features
+        # data['Date'] = pd.to_datetime(data['Date'], format='%Y%m')
+        # data['Date_year'] = data['Date'].dt.year
+        # data['Date_month'] = data['Date'].dt.month
+        # data['Date_quarter'] = data['Date'].dt.quarter
+        # data['Date'] = data['Date'].dt.strftime('%Y%m')  # Convert back to original format
+
         # Add lagging features for salesVolume (lags 1-12)
         for col in ["salesVolume"]:
             for lag in range(1, 13):  # Lag 1 to 12
@@ -316,6 +329,24 @@ async def predict(request: SalesRequest, background_tasks: BackgroundTasks, mode
     except Exception as e:
         logger.error(f"Error processing prediction request: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# @app.post("/predict_page", response_class=HTMLResponse)
+# async def predict_page(
+#     request: Request,
+#     province_id: int = Form(...),
+#     model_name: str = Form(...),
+#     date: str = Form(...),
+# ):
+#     sales_request = SalesRequest(province_id=province_id, model_name=model_name, date=date)
+#     prediction, confidence_interval, feature_importance = model.predict(sales_request)
+
+#     return templates.TemplateResponse("prediction_result.html", {
+#         "request": request,
+#         "prediction": prediction,
+#         "confidence_interval": confidence_interval,
+#         "feature_importance": feature_importance
+#     })
 
 
 @app.get("/health")

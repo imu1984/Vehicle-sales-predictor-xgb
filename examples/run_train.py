@@ -9,10 +9,10 @@ import json
 import argparse
 import warnings
 from typing import Dict, List, Optional
+from omegaconf import OmegaConf
 
 import pandas as pd
 import xgboost as xgb
-import yaml
 
 from vehicle_ml import Trainer, logger, timer
 from vehicle_ml.data import DataIngester, DatetimeSplitter
@@ -62,12 +62,6 @@ def parse_args():
         help="saved model path",
     )
     return parser.parse_args()
-
-
-def get_training_config(config_file: str) -> Dict:
-    with open(config_file) as file:
-        config = yaml.safe_load(file)
-    return config
 
 
 def prepare_data(input_data_path):
@@ -185,7 +179,8 @@ def run_train(input_data_path, saved_model_path, config, label_column_name="sale
     feature_columns = config["categorical_feature"].copy()
     data = add_features(data, feature_columns=feature_columns)
     # data.to_csv("temp.csv", index=False)
-    data[config["categorical_feature"]] = data[config["categorical_feature"]].astype(str).astype("category")
+    for col in config["categorical_feature"]:
+        data[col] = data[col].astype(str).astype("category")
     logger.info(
         f"[IMPORTANT] Feature size: {len(feature_columns)}, categorical feature: {len(config['categorical_feature'])}"
     )
@@ -233,6 +228,7 @@ if __name__ == "__main__":
         args.saved_model_path = f"./models/{args.exp_id}.pkl"
 
     logger.info(f"[IMPORTANT] Start Experiment: {args.exp_id}")
-    config = get_training_config(args.config_file_path)
+    config = OmegaConf.load(args.config_file_path)
+    config = OmegaConf.to_container(config, resolve=True)
 
     run_train(input_data_path=args.input_data_path, saved_model_path=args.saved_model_path, config=config)

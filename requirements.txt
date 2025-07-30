@@ -8,3 +8,5 @@ joblib>=1.1.0
 psutil>=5.8.0
 tfts
 fastapi
+holidays==0.40
+omegaconf
