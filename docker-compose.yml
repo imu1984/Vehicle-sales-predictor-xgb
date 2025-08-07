@@ -4,6 +4,7 @@ services:
   airflow-webserver:
     build: .
     command: airflow webserver
+    profiles: ["platform"]
     ports:
       - "8080:8080"
     environment:
@@ -28,6 +29,7 @@ services:
   airflow-scheduler:
     build: .
     command: airflow scheduler
+    profiles: ["platform"]
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__SQL_ALCHEMY_CONN=sqlite:////opt/airflow/airflow.db
@@ -46,6 +48,7 @@ services:
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:latest
+    profiles: ["platform"]
     ports:
       - "5000:5000"
     volumes:
@@ -53,18 +56,19 @@ services:
     command: mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root /mlflow/mlruns --host 0.0.0.0
 
   training:
-    build: .
-    command: python examples/run_train.py
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.train
+    profiles: ["platform", "train"]
+    command: python run_train.py
     volumes:
       - ./data:/app/data
       - ./models:/app/models
-    depends_on:
-      - airflow-webserver
-      - airflow-scheduler
 
   inference:
     build: .
     command: uvicorn examples.app:app --host 0.0.0.0 --port 8001
+    profiles: ["platform", "inference"]
     ports:
       - "8001:8001"
     volumes:
